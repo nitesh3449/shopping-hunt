@@ -1,0 +1,29 @@
+{
+  "name": "shoppinghunt",
+  "version": "1.0.0",
+  "description": "A shopping hunt rest apis",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mongo",
+    "api",
+    "rest",
+    "json"
+  ],
+  "author": "Nitesh Kumar Verma",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.6",
+    "fs": "0.0.1-security",
+    "gitignore": "^0.6.0",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.9",
+    "path": "^0.12.7"
+  }
+}
