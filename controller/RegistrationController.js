@@ -142,7 +142,7 @@ var RegistrationController = {
                         last_name: lastname ? lastname : user_details.last_name,
                         mobile_number: mobileNumber ? mobileNumber : user_details.mobile_number,
                         email: email ? email : user_details.email,
-                        auth_token: auth_token ? auth_token : user_details.auth_token,
+                        auth_token: authtoken ? authtoken : user_details.auth_token,
                     }
 
                     // Update user profile
@@ -161,6 +161,37 @@ var RegistrationController = {
 
         }catch(e){
             res.json({'success':false, 'message':'Something went wrong', code:500});    
+        }
+    },
+
+    //////////Update User Image///////////
+    updateUserImage: async function(req, res){
+        try{
+            var user_id = req.body.user_id;
+            let profileImage =   req.files.profileImage;
+
+            if(typeof user_id === 'undefined' || typeof profileImage === 'undefined'){
+                return res.json({'message':'Please provide required fields', code:500}); 
+            }
+            // let userImagePath = ''; 
+            let currentDate = Date.now();
+            let filename = profileImage.name;
+            let filenameorg = filename.replace(/ /g,"_");  
+            var baseURL = process.env.BASE_URL;
+            userImagePath =  baseURL+'public/'+currentDate+'_'+filenameorg;   
+            await profileImage.mv(`./public/${currentDate}_${filenameorg}`); 
+          
+            var findUser = {_id: user_id};
+            var updateValue = {               
+                user_image:userImagePath                 
+            };
+            console.log(userImagePath);
+            await userModel.updateOne(findUser, updateValue, async function (err, datainfo) { 
+                var user_details = await userModel.findOne({ _id: user_id }).exec();
+                res.json({ 'success': true, 'message': 'User image updated successfully', code: 200, user: user_details });
+            });
+        }catch(e){
+            res.json({'success':false, 'message':'Something went wrong '+e, code:500});    
         }
     },
 

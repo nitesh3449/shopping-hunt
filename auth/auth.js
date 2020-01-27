@@ -5,7 +5,7 @@ let checkToken = (req, res, next) => {
   if (token){
     tokens = token.split(' ');
     token = tokens[2];    
-    console.log(token);
+    // console.log(token);
     jwt.verify(token, process.env.JWT_SECRET_VAL, (err, decoded) => {
       if (err) {
         return res.json({

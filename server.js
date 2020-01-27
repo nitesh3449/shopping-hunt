@@ -1,5 +1,6 @@
 const express = require('express');
 let app = express();
+const _ = require('lodash');
 let bodyParser = require('body-parser');
 const dbConfig = require('./config/database.js');
 const mongoose = require('mongoose');
@@ -22,7 +23,7 @@ app.use(express.json());
 app.use(bodyParser.json({limit:'50mb'})); 
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));
 app.use(express.urlencoded({extended: false}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static(path.join(__dirname, 'public')));
 app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/'
