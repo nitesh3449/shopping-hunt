@@ -12,5 +12,10 @@ routes.post('/updateUserImage', checkToken, RegistrationController.updateUserIma
 
 routes.post('/fetchProducts', checkToken, ProductController.fetchProductList);
 routes.post('/addNewProduct', checkToken, ProductController.addNewProduct);
+routes.post('/deleteProduct', checkToken, ProductController.deleteProduct);
+routes.post('/updateProductImage', checkToken, ProductController.updateProductImage);
+routes.post('/deleteProductImage', checkToken, ProductController.deleteProductImage);
+
+
 //Router define for App end
 module.exports = routes;

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 var ProductDataSchema = mongoose.Schema({
     productName: { type: String, default:""},
     productImage: { type: String, default:""},
+    productImagePath: { type: String, default:""},
     wishlistStatus: { type: String, default:""},
     rating: { type: String, default:""},
     reviewNumber: { type: String, default:""},

@@ -1,4 +1,5 @@
 const productModel = require('../models/productModel');
+const fs = require( 'fs' );
 
 var ProductController = {
     ////////fetchProductList///////
@@ -75,6 +76,106 @@ var ProductController = {
             res.json({'success':false, 'message':'Something went wrong '+e, 'code': 500});
         }
     },
+
+    ////////////Delete product/////////////////
+    deleteProduct: async function(req, res){
+        try{
+            var productId = req.body.productId;
+            if(typeof productId === ''){
+                return res.json({'success':false, 'message':'Please provide required field', code:500}); 
+            } 
+
+            productModel.deleteOne({_id:productId}, (err, data)=>{
+                if(err) res.json({'success':false, 'message':'Something went wrong', 'code': 500});
+
+                res.json({'success':true, 'message':'Item deleted successfully', 'code': 200});
+            });
+        }catch(e){
+            res.json({'success':false, 'message':'Something went wrong '+e, 'code': 500});
+        }
+    },
+
+    //////////Update User Image///////////
+    updateProductImage: async function(req, res){
+        try{
+            var productId = req.body.productId;
+            let productImage =   req.files.productImage;
+
+            if(typeof productId === 'undefined' || typeof productImage === 'undefined'){
+                return res.json({'message':'Please provide required fields', code:500}); 
+            }
+
+            productModel.findOne({_id : productId},{productImagePath:1}, async (err, data)=>{
+                if(err) res.json({'success':false, 'message':'Something went wrong', 'code': 500});
+
+                if(data['productImagePath']!=''){
+                    fs.unlink(data['productImagePath'], function(err) {
+                        if(err && err.code == 'ENOENT') {
+                            // file doens't exist
+                            console.info("File doesn't exist, won't remove it. "+err);
+                        } else if (err) {
+                            // other errors, e.g. maybe we don't have enough permission
+                            console.error("Error occurred while trying to remove file");
+                        } else {
+                            console.info(`removed`);
+                        }
+                    }); 
+                }
+                // let userImagePath = ''; 
+                let currentDate = Date.now();
+                let filename = productImage.name;
+                let filenameorg = filename.replace(/ /g,"_");  
+                var baseURL = process.env.BASE_URL;
+                productImagePath =  baseURL+'public/product/'+currentDate+'_'+filenameorg;   
+                await productImage.mv(`./public/product/${currentDate}_${filenameorg}`); 
+            
+                var findProduct = {_id: productId};
+                var updateValue = {               
+                    productImage:productImagePath ,
+                    productImagePath:'public/product/'+currentDate+'_'+filenameorg                
+                };
+                console.log(productImagePath);
+                await productModel.updateOne(findProduct, updateValue, async function (err, datainfo) { 
+                    var productDetails = await productModel.findOne({ _id: productId }).exec();
+                    res.json({ 'success': true, 'message': 'Product image updated successfully', code: 200, user: productDetails });
+                });
+            });
+        
+        }catch(e){
+            res.json({'success':false, 'message':'Something went wrong '+e, code:500});    
+        }
+    },
+
+    deleteProductImage: async function(req, res){
+        try{
+            var productId = req.body.productId;
+            if(typeof productId === ''){
+                return res.json({'success':false, 'message':'Please provide required field', code:500}); 
+            } 
+
+            productModel.findOne({_id : productId},{productImagePath:1}, (err, data)=>{
+                if(err) res.json({'success':false, 'message':'Something went wrong', 'code': 500});
+
+                fs.unlink(data['productImagePath'], function(err) {
+                    if(err && err.code == 'ENOENT') {
+                        // file doens't exist
+                        console.info("File doesn't exist, won't remove it. "+err);
+                    } else if (err) {
+                        // other errors, e.g. maybe we don't have enough permission
+                        console.error("Error occurred while trying to remove file");
+                    } else {
+                        console.info(`removed`);
+                    }
+                });
+
+                // fs.unlinkSync(data['productImage']);
+                res.json({'success':true, 'message':'Item deleted successfully', 'code': 200,'data':data['productImage']});
+            });
+        }catch(e){
+            res.json({'success':false, 'message':'Something went wrong '+e, code:500});    
+        }
+    },
+
 }
 
 module.exports = ProductController;

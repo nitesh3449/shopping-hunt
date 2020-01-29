@@ -178,8 +178,8 @@ var RegistrationController = {
             let filename = profileImage.name;
             let filenameorg = filename.replace(/ /g,"_");  
             var baseURL = process.env.BASE_URL;
-            userImagePath =  baseURL+'public/'+currentDate+'_'+filenameorg;   
-            await profileImage.mv(`./public/${currentDate}_${filenameorg}`); 
+            userImagePath =  baseURL+'public/profile/'+currentDate+'_'+filenameorg;   
+            await profileImage.mv(`./public/profile/${currentDate}_${filenameorg}`); 
           
             var findUser = {_id: user_id};
             var updateValue = {               
