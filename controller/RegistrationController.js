@@ -39,9 +39,10 @@ var RegistrationController = {
                         last_name: lastname,
                         mobile_number: mobileNumber,
                         email: email,
-                        password: password,
                         auth_token: authtoken
                     });
+					
+					userInfo.password = userInfo.generateHash(password);
                     userInfo.save(function(err, dataInfo){
                         if(err){
                             res.json({'success':false, 'message': 'something went wrong', code : 500});                
@@ -79,10 +80,17 @@ var RegistrationController = {
             const update = { auth_token: authtoken };
 
             await userModel.updateOne(filter, update, (err, chk)=>{
-                userModel.findOne({ $or:[{email:mobileNumber},{mobile_number:mobileNumber} ], password: password}).exec(async function(err, info){
+                userModel.findOne({ $or:[{email:mobileNumber},{mobile_number:mobileNumber} ]}).exec(async function(err, info){
                     if(err) { res.status(500).json(err); return; }; 
                     if(info!=null){
-                        res.json({'success':true, 'message':'Success', code:200,  info:info});
+						// test a matching password
+						if (info.validPassword(password)) {
+							res.json({'success':true, 'message':'Success', code:200,  info:info});
+						} else {
+						  // password matched. proceed forward
+						  res.json({'success':false, 'message':'Credentials not found please recheck', code:200,  info:{}});
+						}
+					
                     } else{
                         res.json({'success':false, 'message':'Number not found please recheck', code:200,  info:{}});
                     }  
