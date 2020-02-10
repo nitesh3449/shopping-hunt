@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 // Create schema DataexportModel
 var ProductDataSchema = mongoose.Schema({
     productName: { type: String, default:""},
-    productImage: { type: String, default:""},
-    productImagePath: { type: String, default:""},
+    productImageData: { type: String, default:""},
     wishlistStatus: { type: String, default:""},
     rating: { type: String, default:""},
     reviewNumber: { type: String, default:""},
     basePrice: { type: String, default:""},
     finalPrice: { type: String, default:""},
+    categoryId: { type: String, default:""},
     discountPercent: { type: String, default:""},
     availability:{ type: String, default:""},
     created_at : { type: Date, required: true, default: Date.now },
