@@ -21,6 +21,21 @@ routes.post('/fetchCategoryDetail', checkToken, HomeController.fetchCategoryDeta
 routes.post('/addNewCategory', checkToken, HomeController.addNewCategory);
 routes.post('/deleteSingleCategory', checkToken, HomeController.deleteSingleCategory);
 
+routes.post('/addNewBrand', checkToken, HomeController.addNewBrand);
+routes.post('/fetchBrand', checkToken, HomeController.fetchBrand);
+routes.post('/deleteBrand', checkToken, HomeController.deleteBrand);
+
+routes.post('/addNewCountry', checkToken, HomeController.addNewCountry);
+routes.post('/fetchCountry', checkToken, HomeController.fetchCountry);
+routes.post('/deleteCountry', checkToken, HomeController.deleteCountry);
+
+routes.post('/addNewCity', checkToken, HomeController.addNewCity);
+routes.post('/fetchCity', checkToken, HomeController.fetchCity);
+routes.post('/deleteCity', checkToken, HomeController.deleteCity);
+
+routes.post('/addNewState', checkToken, HomeController.addNewState);
+routes.post('/fetchState', checkToken, HomeController.fetchState);
+routes.post('/deleteState', checkToken, HomeController.deleteState);
 
 //Router define for App end
 module.exports = routes;
