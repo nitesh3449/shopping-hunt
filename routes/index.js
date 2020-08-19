@@ -7,7 +7,7 @@ const HomeController = require('../controller/HomeController');
 
 routes.post('/registerMe',  RegistrationController.regMe); 
 routes.post('/login',  RegistrationController.login); 
-routes.post('/getProfile', checkToken, RegistrationController.getProfile); 
+routes.get('/getProfile', checkToken, RegistrationController.getProfile); 
 routes.post('/updateUserProfile', checkToken, RegistrationController.updateUserProfile);
 routes.post('/updateUserImage', checkToken, RegistrationController.updateUserImage);
 
@@ -36,6 +36,17 @@ routes.post('/deleteCity', checkToken, HomeController.deleteCity);
 routes.post('/addNewState', checkToken, HomeController.addNewState);
 routes.post('/fetchState', checkToken, HomeController.fetchState);
 routes.post('/deleteState', checkToken, HomeController.deleteState);
+
+routes.post('/fetchColor', checkToken, HomeController.fetchColor);
+routes.post('/addNewColor', checkToken, HomeController.addNewColor);
+routes.post('/deleteColor', checkToken, HomeController.deleteColor);
+
+routes.post('/fetchSize', checkToken, HomeController.fetchSize);
+routes.post('/addNewSize', checkToken, HomeController.addNewSize);
+routes.post('/deleteSize', checkToken, HomeController.deleteSize);
+
+routes.post('/fetchWishlist', checkToken, HomeController.fetchWishlist);
+routes.post('/addRemoveWishlist', checkToken, HomeController.addRemoveWishlist);
 
 //Router define for App end
 module.exports = routes;

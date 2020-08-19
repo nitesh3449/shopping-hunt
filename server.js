@@ -10,7 +10,6 @@ const fileUpload = require('express-fileupload');
 var https = require("https");
 var fs = require( 'fs' );
 
-
 const db = require('./config/database');
 const indexRouter = require('./routes/index');
 // app.use(logger('tiny')); 

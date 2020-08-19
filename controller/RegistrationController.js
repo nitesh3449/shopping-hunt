@@ -104,7 +104,7 @@ var RegistrationController = {
     ///////////Get Profile Detail////////
     getProfile: async function(req, res){
         try{
-            var user_id = req.body.user_id;
+            var user_id = req.query.user_id;
             if( typeof(user_id) === 'undefined' ){
                 res.json({'success':false, 'message':'Please provide user id', code:500});    
             }
