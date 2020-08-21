@@ -70,6 +70,7 @@ var RegistrationController = {
         try{
             var mobileNumber = req.body.mobile_number; 
             var password     = req.body.password;
+            console.log("hello");
     
             if(typeof mobileNumber === ''|| typeof password === ''){
                 return res.json({'success':false, 'message':'Please provide required field', code:500}); 
