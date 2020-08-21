@@ -5,6 +5,7 @@ let bodyParser = require('body-parser');
 const dbConfig = require('./config/database.js');
 const mongoose = require('mongoose');
 const path = require('path');
+const cors = require('cors');
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
 var https = require("https");
@@ -27,6 +28,9 @@ app.use(fileUpload({
   useTempFiles : true,
   tempFileDir : '/tmp/'
 }));
+
+app.use(cors());
+
 var port = process.env.PORT || 8080;
 console.log('PROD');
 app.get('/', (req, res) => {
