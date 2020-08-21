@@ -3,7 +3,7 @@ const checkToken = require('../auth/auth');
 const routes = express.Router();
 const HomeController = require('../controller/HomeController');
 const ProductController = require('../controller/ProductController');
-const RegistrationController = require('../controller/RegistrationController');
+// const RegistrationController = require('../controller/RegistrationController');
 
 routes.post('/registerMe',  RegistrationController.regMe); 
 routes.post('/login',  RegistrationController.login); 
