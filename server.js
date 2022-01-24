@@ -14,11 +14,11 @@ var fs = require( 'fs' );
 const db = require('./config/database');
 const indexRouter = require('./routes/index');
 // app.use(logger('tiny'));  // https://shoppinghuntapi.herokuapp.com/
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://shoppinghuntapi.herokuapp.com/"); 
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "https://shoppinghuntapi.herokuapp.com/"); 
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+//   });
 app.use(express.json());
 app.use(bodyParser.json({limit:'50mb'})); 
 app.use(bodyParser.urlencoded({extended:true, limit:'50mb'}));

@@ -184,7 +184,7 @@ var ProductController = {
 						let currentDate = Date.now();
 						let filename = productImage.name;
 						let filenameorg = filename.replace(/ /g,"_");  
-						var baseURL = process.env.BASE_URL;
+						var baseURL = "http://localhost:3000/";
 						productImageLink =  baseURL+'public/product/'+currentDate+'_'+filenameorg; 
 						productImagePath =  'public/product/'+currentDate+'_'+filenameorg; 
 				
@@ -202,7 +202,7 @@ var ProductController = {
 							//res.json({'success':true, 'message':'Successfully added', code:200});
 						});
                     }
-                    res.json({ 'success': true, 'message': 'Product image updated successfully', code: 200, user: productDetails });
+                    res.json({ 'success': true, 'message': 'Product image updated successfully', code: 200, user: productImageInfo });
 					// var findProduct = {_id: productId};
 					// var updateValue = {               
 					// 	productImage : productImageLink,               
