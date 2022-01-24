@@ -11,7 +11,7 @@ const fileUpload = require('express-fileupload');
 var https = require("https");
 var fs = require( 'fs' );
 
-const db = require('./config/database');
+// const db = require('./config/database');
 const indexRouter = require('./routes/index');
 // app.use(logger('tiny'));  // https://shoppinghuntapi.herokuapp.com/
 // app.use(function(req, res, next) {
