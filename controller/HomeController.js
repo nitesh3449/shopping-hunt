@@ -7,6 +7,7 @@ const ColorModel = require('../models/ColorModel');
 const SizeModel = require('../models/SizeModel');
 const ProductModel = require('../models/productModel');
 const WishlistModel = require('../models/WishlistModel');
+const productImageModel = require('../models/productImageModel');
 
 var HomeController = {
 
@@ -565,15 +566,28 @@ var HomeController = {
             }
             var skip = limit * (page - 1);
 
-            await WishlistModel.find().skip(skip).limit(limit).exec(async function (err, dataInfo) {
+            await ProductModel.find({ 'wishlistStatus': "1"}).skip(skip).limit(limit).exec(async function (err, dataInfo) {
                 if (err) res.json({ 'success': false, 'message': 'Something went wrong ' + e, 'code': 500 });
                 console.log(dataInfo);
                 var newArr = [];
-                for(let element of dataInfo){
-                    element = JSON.parse(JSON.stringify(element));
-                    var productData = await ProductModel.findOne({_id: element['productId']}).exec();
-                    newArr.push(productData);
+                if(dataInfo.length > 0) {
+                    for(let data of dataInfo){
+                        // element = JSON.parse(JSON.stringify(element));
+                        // var productData = await ProductModel.findOne({_id: element['productId']}).exec();
+                        data = JSON.parse(JSON.stringify(data));
+                            data.productImageData = [];
+                            data.categoryData = {};
+                            var image = await productImageModel.find({'productId': data['_id']}).select('productId productImageData').exec();
+                            data.productImageData = image;
+                        
+                            var categoryInfo = await CategoriesModel.findOne({'_id':data['categoryId']}).select('categoryName').exec();
+                            data.categoryData = categoryInfo;
+
+                            // console.log(data);
+                            newArr.push(data);
+                    }
                 }
+            
                 res.json({ 'success': true, 'message': 'Success', code: 200, 'count': newArr.length, info: newArr });
             });
         } catch (e) {
@@ -584,40 +598,33 @@ var HomeController = {
     addRemoveWishlist: async function (req, res) {
         try {
             var productId = req.body.productId;
-            var userId = req.body.userId;
+            // var userId = req.body.userId;
 
-            if (typeof productId === '' || typeof userId === '') {
+            if (typeof productId === '') {
                 return res.json({ 'success': false, 'message': 'Please provide required fields', code: 500 });
             }
 
-            await WishlistModel.findOne({ 'productId': productId, 'userId':userId }).exec(async function (err, dataInfo) {
+            // await ProductModel.find({ 'wishlistStatus': "1"}).skip(skip).limit(limit).exec(async function (err, dataInfo) {
+           
+            // },
+
+            await ProductModel.findOne({"_id": productId}).exec(async function(err, dataInfo) {
                 if (err) res.json({ 'success': false, 'message': 'Something went wrong ', 'code': 500 });
 
-                if (dataInfo != null) {
-                    await WishlistModel.deleteOne({ 'productId': productId, 'userId':userId  }).exec(async function (err, dataInfo) {
+                console.log(dataInfo);
+                if(dataInfo != null) {
+                    var wishlistStatus = dataInfo['wishlistStatus'] == "1" ? "0" : "1";
+                    var wishlistStatusMessage = dataInfo['wishlistStatus'] == "1" ? "Succesfully removed" : "Succesfully added";
+                    await ProductModel.updateOne({_id:productId},{wishlistStatus: wishlistStatus}).exec(function(err, data){
                         if (err) res.json({ 'success': false, 'message': 'Something went wrong ' + err, 'code': 500 });
 
-                        await ProductModel.updateOne({_id:productId},{wishlistStatus:0}).exec(function(err, data){
-                            if (err) res.json({ 'success': false, 'message': 'Something went wrong ' + err, 'code': 500 });
-                            res.json({ 'success': true, 'Success': 'Succesfully removed', code: 200 }); 
-                        });
-                    });        
+                        res.json({ 'success': true, 'Success': wishlistStatusMessage, code: 200 }); 
+                    });
                 } else {
-                    var wishlistInfo = new WishlistModel({
-                        productId: productId,
-                        userId: userId
-                    });
-
-                    await wishlistInfo.save(async function (err, data) {
-                        if (err) res.json({ 'success': false, 'message': 'Something went wrong ', 'code': 500 });
-                        
-                        await ProductModel.updateOne({_id:productId},{wishlistStatus:1}).exec(function(err, data){
-                            if (err) res.json({ 'success': false, 'message': 'Something went wrong ' + err, 'code': 500 });
-                            res.json({ 'success': true, 'message': 'Successfully added', code: 200 });
-                        });
-                    });
+                    res.json({ 'success': true, 'Success': "Not added", code: 500 }); 
                 }
             });
+
 
         } catch (e) {
             res.json({ 'success': false, 'message': 'Something went wrong ' + e, 'code': 500 });
