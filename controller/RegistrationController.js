@@ -76,7 +76,7 @@ var RegistrationController = {
                 return res.json({'success':false, 'message':'Please provide required field', code:500}); 
             } 
     
-            const authtoken = jwt.sign({ usernumber:mobileNumber }, process.env.JWT_SECRET_VAL);
+            const authtoken = jwt.sign({ usernumber:mobileNumber }, process.env.JWT_SECRET_VAL || "Nitesh");
             const filter = { mobile_number:mobileNumber, email:mobileNumber, password: password};
             const update = { auth_token: authtoken };
 
